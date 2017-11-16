@@ -1,4 +1,4 @@
-const Block = require('../block') 
+const { Block } = require('../block') 
 const { assert } = require('chai')
 
 describe('Block', () => {
@@ -6,9 +6,9 @@ describe('Block', () => {
         it('should add its offsets to a cursor and return the resulting array', () => {
             const testBlock = new Block([{ x: 1, y: -1 }])
             const cursor = { x: 3, y: 2 }
-            const expected = { x: 4, y: 1 }
+            const expected = [{ x: 4, y: 1 }]
 
-            assert.equal(testBlock.getPositions(cursor), expected)
+            assert.deepEqual(testBlock.getPositions(cursor), expected)
         })
     })
      
@@ -29,7 +29,7 @@ describe('Block', () => {
                 { x: 3, y: 0 }
             ]
 
-            assert.equal(testBlock.rotateClockwise().getPositions({ x: 0, y: 0 }), expected)
+            assert.deepEqual(testBlock.rotateClockwise().getPositions({ x: 0, y: 0 }), expected)
         })
 
         it('should correctly rotate all of the offsets clockwise if done twice', () => {
@@ -48,7 +48,7 @@ describe('Block', () => {
                 { x: 0, y: -3 }
             ]
 
-            assert.equal(testBlock.rotateClockwise().rotateClockwise().getPositions({ x: 0, y: 0 }), expected)
+            assert.deepEqual(testBlock.rotateClockwise().rotateClockwise().getPositions({ x: 0, y: 0 }), expected)
         })
 
         it('should correctly rotate all of the offsets clockwise if done thrice', () => {
@@ -67,7 +67,7 @@ describe('Block', () => {
                 { x: -3, y: 0 }
             ]
 
-            assert.equal(testBlock.rotateClockwise().rotateClockwise().rotateClockwise().getPositions({ x: 0, y: 0 }), expected)
+            assert.deepEqual(testBlock.rotateClockwise().rotateClockwise().rotateClockwise().getPositions({ x: 0, y: 0 }), expected)
         })
 
         it('should correctly rotate the block back to its starting position if rotated clockwise four times', () => {
@@ -81,7 +81,7 @@ describe('Block', () => {
             const testBlock = new Block(offsets)
             const expected = offsets
 
-            assert.equal(testBlock.rotateClockwise().rotateClockwise().rotateClockwise().rotateClockwise().getPositions({ x: 0, y: 0 }), expected)
+            assert.deepEqual(testBlock.rotateClockwise().rotateClockwise().rotateClockwise().rotateClockwise().getPositions({ x: 0, y: 0 }), expected)
         })
     })
 })
