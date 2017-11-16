@@ -1,3 +1,5 @@
 *.sw*
 yarn-error.log
 node_modules
+.instrument/
+coverage/
