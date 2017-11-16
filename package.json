@@ -1,0 +1,26 @@
+{
+  "name": "node-tetris",
+  "version": "1.0.0",
+  "description": "A Tetris implementation done in node for my own enjoyment.",
+  "main": "index.js",
+  "directories": {
+    "test": "test"
+  },
+  "devDependencies": {
+    "chai": "^4.1.2",
+    "mocha": "^4.0.1"
+  },
+  "scripts": {
+    "test": "mocha"
+  },
+  "repository": {
+    "type": "git",
+    "url": "git+https://github.com/agcollins/node-tetris.git"
+  },
+  "author": "Alex Collins",
+  "license": "ISC",
+  "bugs": {
+    "url": "https://github.com/agcollins/node-tetris/issues"
+  },
+  "homepage": "https://github.com/agcollins/node-tetris#readme"
+}
