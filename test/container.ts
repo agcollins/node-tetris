@@ -1,30 +1,40 @@
-const { Container } = require('../container')
-const { Block } = require('../block')
-const { assert } = require('chai')
+import { Container } from "../container"
+import { Block } from "../block"
+import { assert } from "chai"
+import { Point } from '../point'
 
 // A simple 1x1 block for testing
 class CursorBlock extends Block {
     constructor() {
-        super({ x: 0, y: 0 })
+        super([ new Point(0, 0) ])
     }
 }
 
 describe('Container', () => {
+    describe('get cursor position', () => {
+        it('should sum the x and y', () => {
+            const container = new Container(10, 24).setCurrentBlock(new CursorBlock)
+            const expected = [ new Point(3, 3) ]
+            
+            assert.deepEqual(container.getCursorPositions(new Point(3, 3)), expected)
+        })
+    })
+
     describe('valid cursor movement in the bounds of the container', () => {
-        let container = null
+        let container: Container = null
 
         beforeEach(() => {
-            container = new Container(8, 16).addBlock(new CursorBlock())
+            container = new Container(10, 24).setCurrentBlock(new CursorBlock())
         })
 
-        it('should default the cursor to (3, 15)', () => {
-            const expected = [{ x: 3, y: 15 }]
+        it('should default the cursor to (4, 23)', () => {
+            const expected = [ new Point(4, 23) ]
 
             assert.deepEqual(container.getCursorPositions(), expected)
         })
 
         it('should allow the cursor to move left', () => {
-            const expected = [{ x: 2, y: 15 }]
+            const expected = [ new Point(3, 23) ]
 
             container.moveCursorLeft()
 
@@ -32,7 +42,7 @@ describe('Container', () => {
         })
 
         it('should allow the cursor to move right', () => {
-            const expected = [{ x: 4, y: 15 }]
+            const expected = [ new Point(5, 23) ]
 
             container.moveCursorRight()
 
@@ -40,7 +50,7 @@ describe('Container', () => {
         })
 
         it('should allow the cursor to move down', () => {
-            const expected = [{ x: 4, y: 14 }]
+            const expected = [ new Point(4, 22) ]
 
             container.moveCursorDown()
 
@@ -49,10 +59,10 @@ describe('Container', () => {
     })
 
     describe('cursor movement which is blocked by the bounds of the container', () => {
-        let container = null
-        const expected = [{ x: 0, y: 1 }]
+        let container: Container = null
+        const expected = [ new Point(0, 0) ]
 
-        beforEach(() => {
+        beforeEach(() => {
             container = new Container(1, 1).setCurrentBlock(new CursorBlock())
         })
 
@@ -75,7 +85,7 @@ describe('Container', () => {
         it('should have no cursor after moving down (collision)', () => {
             container.moveCursorDown()
 
-            assert.equal(container.getCursorPositions(), null)
+            assert.deepEqual(container.getCursorPositions(), [])
         })
     })
 })
