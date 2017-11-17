@@ -19,28 +19,28 @@ export class Container {
     }
 
     moveCursorLeft() : Container {
-        const newCursor = new Point(this.cursor.x - 1, this.cursor.y)
-        if (!this.blockCollision(newCursor))
-            this.cursor = newCursor
+        this.moveCursor(this.cursor.left())
         return this
     }
 
     moveCursorRight() : Container {
-        const newCursor = new Point(this.cursor.x + 1, this.cursor.y)
-        if (!this.blockCollision(newCursor))
-            this.cursor = newCursor
+        this.moveCursor(this.cursor.right())
         return this
     }
 
     moveCursorDown() : Container {
-        const newCursor = new Point(this.cursor.x, this.cursor.y - 1)
-        if (!this.blockCollision(newCursor))
-            this.cursor = newCursor
-        else {
+        if (!this.moveCursor(this.cursor.down())) {
             this.currentBlock = null
             this.resetCursor()
         }
         return this
+    }
+    
+    private moveCursor(newCursor: Point) : boolean {
+        if (this.blockCollision(newCursor)) return false
+ 
+        this.cursor = newCursor
+        return true
     }
 
     getCursorPositions(newCursor: Point = this.cursor) : Point[] {
