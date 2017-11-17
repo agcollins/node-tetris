@@ -7,14 +7,16 @@
     "test": "test"
   },
   "devDependencies": {
+    "@types/chai": "^4.0.5",
+    "@types/mocha": "^2.2.44",
     "chai": "^4.1.2",
     "coveralls": "^3.0.0",
     "istanbul": "^0.4.5",
     "mocha": "^4.0.1"
   },
   "scripts": {
-    "test": "mocha",
-    "cover": "./node_modules/.bin/istanbul cover ./node_modules/mocha/bin/_mocha",
+    "test": "tsc && mocha js/test/*.js",
+    "cover": "tsc && ./node_modules/.bin/istanbul cover ./node_modules/mocha/bin/_mocha js/test/*.js",
     "coveralls": "npm run cover -- --report lcovonly && cat ./coverage/lcov.info | coveralls"
   },
   "repository": {
@@ -26,5 +28,8 @@
   "bugs": {
     "url": "https://github.com/agcollins/node-tetris/issues"
   },
-  "homepage": "https://github.com/agcollins/node-tetris#readme"
+  "homepage": "https://github.com/agcollins/node-tetris#readme",
+  "dependencies": {
+    "@types/node": "^8.0.53"
+  }
 }
