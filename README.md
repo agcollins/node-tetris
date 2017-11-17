@@ -2,3 +2,7 @@
 
 # node-tetris
 #### an implementation of tetris in node
+
+### To run tests:
+* `$ npm install -g mocha typescript`
+* `$ npm test`
