@@ -64,7 +64,6 @@ export class Container {
         if (point.x < 0) return true
         if (point.x >= this.width) return true
         if (point.y < 0) return true
-        if (point.y >= this.height) return true // not really possible
         return false
     }
 }
