@@ -8,7 +8,7 @@ export class Block {
     }
 
     getPositions(cursor: Point) : Point[] {
-        return this.offsets.map(offset => ({ x: offset.x + cursor.x, y: offset.y + cursor.y }))
+        return this.offsets.map(offset => new Point(offset.x + cursor.x, offset.y + cursor.y))
     }
 
     rotateClockwise() : Block {
