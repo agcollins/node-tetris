@@ -3,8 +3,6 @@ import { assert } from "chai";
 import { Point } from "../point"
 
 describe('Block', () => {
-    const cursor = new Point(0, 0)
-
     describe('Get position', () => {
         it('should add its offsets to a cursor and return the resulting array', () => {
             const testBlock = new Block([ new Point(1, -1) ])
@@ -16,6 +14,8 @@ describe('Block', () => {
     })
      
     describe('Rotation', () => {
+        const cursor = new Point(0, 0)
+
         it('should rotate all of the offsets clockwise if done once', () => {
             const offsets = [
                 new Point(0, 0),

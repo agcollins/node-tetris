@@ -6,10 +6,12 @@ export class Container {
     private height: number
     private cursor: Point = null
     private currentBlock: Block = null
+    private grid : boolean[][] = null
 
     constructor(width: number, height: number) {
         this.width = width
         this.height = height
+        this.grid = new Array(height).fill(false).map(row => Array(width).fill(false))
         this.resetCursor()
     }
 
@@ -43,6 +45,11 @@ export class Container {
         return true
     }
 
+    setCursor(cursor: Point) : Container {
+        this.cursor = cursor
+        return this
+    }
+
     getCursorPositions(newCursor: Point = this.cursor) : Point[] {
         if (!this.currentBlock) return []
         return this.currentBlock.getPositions(newCursor)
@@ -65,5 +72,25 @@ export class Container {
         if (point.x >= this.width) return true
         if (point.y < 0) return true
         return false
+    }
+
+    toString() : String {
+        const positions = this.getCursorPositions()
+        console.log(positions)
+        console.log(this.grid)
+        console.log(this.grid.map((value, index) => `(${index / this.width}, ${index % this.width})`))
+        positions.forEach(position => this.grid[position.y][position.x] = true)
+        
+        const buffer = Array(this.width * (this.height + 1) - 1) // height + 1 because one newline character and - 1 because no last character
+
+        for (let i = this.height - 1; i >= 0; --i) {
+            this.grid[i].forEach(position => buffer.push(position ? 'x' : '.'))
+            
+            if (i != 0) buffer.push('\n')
+        }
+
+        this.getCursorPositions().forEach(position => this.grid[position.y][position.x] = false)
+
+        return buffer.join('')
     }
 }
