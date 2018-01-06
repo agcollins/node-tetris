@@ -67,11 +67,12 @@ export class Container {
         return this.getCursorPositions(newCursor).some(position => this.outOfBounds(position))
     }
 
+    // Should this be a method in point -- and pass in width / height?
     private outOfBounds(point: Point) : boolean {
         if (point.x < 0) return true
+        if (point.y < 0) return true
         if (point.x >= this.height) return true
         if (point.y >= this.width) return true
-        if (point.y < 0) return true
         return false
     }
 

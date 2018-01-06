@@ -2,6 +2,7 @@ import { Container } from "../container"
 import { Block } from "../block"
 import { assert } from "chai"
 import { Point } from '../point'
+import { teeBlock } from '../preset-block'
 
 // A simple 1x1 block for testing
 class CursorBlock extends Block {
@@ -134,6 +135,42 @@ describe('Container printing', () => {
         it('should print after moving left', () => {
             const expected = 'x...\n....'
             container.moveCursorLeft()
+
+            assert.deepEqual(container.toString(), expected)
+        })
+    })
+
+    describe('with a tee block', () => {
+        let container : Container = null
+
+        beforeEach(() => {
+            container = new Container(4, 3)
+            container.setCurrentBlock(teeBlock)
+        })
+
+        it('should print the grid and block', () => {
+            const expected = '.x..\nxxx.\n....'
+
+            assert.deepEqual(container.toString(), expected)
+        })
+
+        it('should print after moving right', () => {
+            const expected = '..x.\n.xxx\n....'
+            container.moveCursorRight()
+
+            assert.deepEqual(container.toString(), expected)
+        })
+
+        it('should print after moving left (should not move)', () => {
+            const expected = '.x..\nxxx.\n....'
+            container.moveCursorLeft()
+
+            assert.deepEqual(container.toString(), expected)
+        })
+
+        it('should print after moving down', () => {
+            const expected = '....\n.x..\nxxx.'
+            container.moveCursorDown()
 
             assert.deepEqual(container.toString(), expected)
         })
