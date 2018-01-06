@@ -77,17 +77,17 @@ export class Container {
 
     toString() : String {
         const positions = this.getCursorPositions()
-        positions.forEach(position => this.grid[position.y][position.x] = true)
+        positions.forEach(position => this.grid[position.x][position.y] = true)
         
         const buffer = Array(this.width * (this.height + 1) - 1) // height + 1 because one newline character and - 1 because no last character
 
         for (let i = 0; i < this.height; ++i) {
             this.grid[i].forEach(position => buffer.push(position ? 'x' : '.'))
             
-            if (i == this.height - 1) buffer.push('\n')
+            if (i != this.height - 1) buffer.push('\n')
         }
 
-        this.getCursorPositions().forEach(position => this.grid[position.y][position.x] = false)
+        positions.forEach(position => this.grid[position.x][position.y] = false)
 
         return buffer.join('')
     }

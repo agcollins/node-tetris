@@ -91,3 +91,51 @@ describe('Container movement', () => {
         })
     })
 })
+
+describe('Container printing', () => {
+    describe('empty container', () => {
+        const container = new Container(4, 2)
+
+        it('should print an empty grid', () => {
+            const expected = '....\n....'
+
+            assert.deepEqual(container.toString(), expected)
+        })
+    })
+
+    describe('with a 1x1 block', () => {
+        let container : Container = null
+
+        beforeEach(() => {
+            container = new Container(4, 2)
+            container.setCurrentBlock(new Block([ new Point(0, 0) ]))
+        })
+
+        it('should print the grid and block', () => {
+            const expected = '.x..\n....'
+
+            assert.deepEqual(container.toString(), expected)
+        })
+
+        it('should print after moving down', () => {
+            const expected = '....\n.x..'
+            container.moveCursorDown()
+
+            assert.deepEqual(container.toString(), expected)
+        })
+
+        it('should print after moving right', () => {
+            const expected = '..x.\n....'
+            container.moveCursorRight()
+
+            assert.deepEqual(container.toString(), expected)
+        })
+
+        it('should print after moving left', () => {
+            const expected = 'x...\n....'
+            container.moveCursorLeft()
+
+            assert.deepEqual(container.toString(), expected)
+        })
+    })
+})
