@@ -144,7 +144,7 @@ describe('Container printing', () => {
         let container : Container = null
 
         beforeEach(() => {
-            container = new Container(4, 3)
+            container = new Container(4, 6)
             container.setCurrentBlock(teeBlock)
         })
 
