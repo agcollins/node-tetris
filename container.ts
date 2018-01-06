@@ -69,7 +69,6 @@ export class Container {
 
     // Should this be a method in point -- and pass in width / height?
     private outOfBounds(point: Point) : boolean {
-        if (point.x < 0) return true
         if (point.y < 0) return true
         if (point.x >= this.height) return true
         if (point.y >= this.width) return true

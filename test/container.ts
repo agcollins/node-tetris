@@ -23,14 +23,13 @@ describe('Container movement', () => {
 
     describe('valid cursor movement in the bounds of the container', () => {
         let container: Container = null
+        const startPoint = new Point(0, 4) 
 
         beforeEach(() => {
             container = new Container(10, 24).setCurrentBlock(new CursorBlock())
         })
 
-        const startPoint = new Point(0, 4) 
-
-        it('should default the cursor to asdfasdf', () => {
+        it('should default the cursor to (0, 4)', () => {
             const expected = [ startPoint ]
 
             assert.deepEqual(container.getCursorPositions(), expected)
