@@ -10,7 +10,7 @@ class CursorBlock extends Block {
     }
 }
 
-describe('Container', () => {
+describe('Container movement', () => {
     describe('get cursor position', () => {
         it('should sum the x and y', () => {
             const container = new Container(10, 24).setCurrentBlock(new CursorBlock)
@@ -27,14 +27,16 @@ describe('Container', () => {
             container = new Container(10, 24).setCurrentBlock(new CursorBlock())
         })
 
-        it('should default the cursor to (4, 23)', () => {
-            const expected = [ new Point(4, 23) ]
+        const startPoint = new Point(0, 4) 
+
+        it('should default the cursor to asdfasdf', () => {
+            const expected = [ startPoint ]
 
             assert.deepEqual(container.getCursorPositions(), expected)
         })
 
         it('should allow the cursor to move left', () => {
-            const expected = [ new Point(3, 23) ]
+            const expected = [ startPoint.left() ]
 
             container.moveCursorLeft()
 
@@ -42,7 +44,7 @@ describe('Container', () => {
         })
 
         it('should allow the cursor to move right', () => {
-            const expected = [ new Point(5, 23) ]
+            const expected = [ startPoint.right() ]
 
             container.moveCursorRight()
 
@@ -50,7 +52,7 @@ describe('Container', () => {
         })
 
         it('should allow the cursor to move down', () => {
-            const expected = [ new Point(4, 22) ]
+            const expected = [ startPoint.down() ]
 
             container.moveCursorDown()
 

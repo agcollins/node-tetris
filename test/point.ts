@@ -6,7 +6,7 @@ describe('Point', () => {
         it('should get a position', () => {
             const startPoint = new Point(0, 0)
 
-            assert.deepEqual(startPoint.left(), new Point(-1, 0))
+            assert.deepEqual(startPoint.left(), new Point(0, -1))
         })
 
         it('should not modify the original point', () => {
@@ -22,7 +22,7 @@ describe('Point', () => {
         it('should get a position', () => {
             const startPoint = new Point(0, 0)
 
-            assert.deepEqual(startPoint.right(), new Point(1, 0))
+            assert.deepEqual(startPoint.right(), new Point(0, 1))
         })
 
         it('should not modify the original point', () => {
@@ -38,7 +38,7 @@ describe('Point', () => {
         it('should get a position', () => {
             const startPoint = new Point(0, 0)
 
-            assert.deepEqual(startPoint.down(), new Point(0, -1))
+            assert.deepEqual(startPoint.down(), new Point(1, 0))
         })
 
         it('should not modify the original point', () => {

@@ -8,14 +8,14 @@ export class Point {
     }
 
     left() : Point {
-        return new Point(this.x - 1, this.y)
+        return new Point(this.x, this.y - 1)
     }
 
     right() : Point {
-        return new Point(this.x + 1, this.y)
+        return new Point(this.x, this.y + 1)
     }
 
     down() : Point {
-        return new Point(this.x, this.y - 1)
+        return new Point(this.x + 1, this.y)
     }
 }
