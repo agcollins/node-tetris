@@ -15,8 +15,8 @@
     "mocha": "^4.0.1"
   },
   "scripts": {
-    "test": "tsc && mocha js/test/*.js",
-    "cover": "tsc && ./node_modules/.bin/istanbul cover ./node_modules/mocha/bin/_mocha js/test/*.js",
+    "test": "rm -rf js/* && tsc && mocha js/test/*.js",
+    "cover": "rm -rf js/* && tsc && ./node_modules/.bin/istanbul cover ./node_modules/mocha/bin/_mocha js/test/*.js",
     "coveralls": "npm run cover -- --report lcovonly && cat ./coverage/lcov.info | coveralls"
   },
   "repository": {

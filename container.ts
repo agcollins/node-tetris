@@ -6,10 +6,12 @@ export class Container {
     private height: number
     private cursor: Point = null
     private currentBlock: Block = null
+    private grid : boolean[][] = null
 
     constructor(width: number, height: number) {
         this.width = width
         this.height = height
+        this.grid = new Array(height).fill(false).map(row => Array(width).fill(false))
         this.resetCursor()
     }
 
@@ -43,16 +45,21 @@ export class Container {
         return true
     }
 
+    setCursor(cursor: Point) : Container {
+        this.cursor = cursor
+        return this
+    }
+
     getCursorPositions(newCursor: Point = this.cursor) : Point[] {
         if (!this.currentBlock) return []
         return this.currentBlock.getPositions(newCursor)
     }
 
     private resetCursor() : Container {
-        const newX = Math.max(0, Math.floor(this.width / 2) - 1)
-        const newY = this.height - 1
+        const column = Math.max(0, Math.floor(this.width / 2) - 1)
+        const row = 0
 
-        this.cursor = new Point(newX, newY)
+        this.cursor = new Point(row, column)
         return this
     }
 
@@ -60,10 +67,28 @@ export class Container {
         return this.getCursorPositions(newCursor).some(position => this.outOfBounds(position))
     }
 
+    // Should this be a method in point -- and pass in width / height?
     private outOfBounds(point: Point) : boolean {
-        if (point.x < 0) return true
-        if (point.x >= this.width) return true
         if (point.y < 0) return true
+        if (point.x >= this.height) return true
+        if (point.y >= this.width) return true
         return false
+    }
+
+    toString() : String {
+        const positions = this.getCursorPositions()
+        positions.forEach(position => this.grid[position.x][position.y] = true)
+        
+        const buffer = Array(this.width * (this.height + 1) - 1) // height + 1 because one newline character and - 1 because no last character
+
+        for (let i = 0; i < this.height; ++i) {
+            this.grid[i].forEach(position => buffer.push(position ? 'x' : '.'))
+            
+            if (i != this.height - 1) buffer.push('\n')
+        }
+
+        positions.forEach(position => this.grid[position.x][position.y] = false)
+
+        return buffer.join('')
     }
 }
