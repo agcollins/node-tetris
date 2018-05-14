@@ -16,7 +16,7 @@ describe('Container movement', () => {
         it('should sum the x and y', () => {
             const container = new Container(10, 24).setCurrentBlock(new CursorBlock)
             const expected = [ new Point(3, 3) ]
-            
+
             assert.deepEqual(container.getCursorPositions(new Point(3, 3)), expected)
         })
     })
@@ -173,5 +173,20 @@ describe('Container printing', () => {
 
             assert.deepEqual(container.toString(), expected)
         })
+    })
+
+    describe('container set cursor', () => {
+        let container: Container = null
+
+        beforeEach(() => container = new Container(3, 3))
+
+        it('should set the cursor', () => {
+            const expected = new Point(0, 0)
+
+            container.setCursor(expected)
+            const actual: Point = container.setCurrentBlock(new CursorBlock()).getCursorPositions()[0]
+
+            assert.deepEqual(actual, expected)
+        }) 
     })
 })
