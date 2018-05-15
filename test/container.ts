@@ -2,19 +2,12 @@ import { Container } from "../container"
 import { Block } from "../block"
 import { assert } from "chai"
 import { Point } from '../point'
-import { teeBlock } from '../preset-block'
-
-// A simple 1x1 block for testing
-class CursorBlock extends Block {
-    constructor() {
-        super([ new Point(0, 0) ])
-    }
-}
+import { teeBlock, singleBlock } from '../preset-block'
 
 describe('Container movement', () => {
     describe('get cursor position', () => {
         it('should sum the x and y', () => {
-            const container = new Container(10, 24).setCurrentBlock(new CursorBlock)
+            const container = new Container(10, 24).setCurrentBlock(singleBlock)
             const expected = [ new Point(3, 3) ]
 
             assert.deepEqual(container.getCursorPositions(new Point(3, 3)), expected)
@@ -26,7 +19,7 @@ describe('Container movement', () => {
         const startPoint = new Point(0, 4) 
 
         beforeEach(() => {
-            container = new Container(10, 24).setCurrentBlock(new CursorBlock())
+            container = new Container(10, 24).setCurrentBlock(singleBlock)
         })
 
         it('should default the cursor to (0, 4)', () => {
@@ -65,7 +58,7 @@ describe('Container movement', () => {
         const expected = [ new Point(0, 0) ]
 
         beforeEach(() => {
-            container = new Container(1, 1).setCurrentBlock(new CursorBlock())
+            container = new Container(1, 1).setCurrentBlock(singleBlock)
         })
 
         it('should place the cursor at (0, 0)', () => {
@@ -184,7 +177,7 @@ describe('Container printing', () => {
             const expected = new Point(0, 0)
 
             container.setCursor(expected)
-            const actual: Point = container.setCurrentBlock(new CursorBlock()).getCursorPositions()[0]
+            const actual: Point = container.setCurrentBlock(singleBlock).getCursorPositions()[0]
 
             assert.deepEqual(actual, expected)
         }) 
