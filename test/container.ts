@@ -2,7 +2,7 @@ import { Container } from "../container"
 import { Block } from "../block"
 import { assert } from "chai"
 import { Point } from '../point'
-import { teeBlock, singleBlock } from '../preset-block'
+import { teeBlock, singleBlock, ellBlock } from '../preset-block'
 
 describe('Container movement', () => {
     describe('get cursor position', () => {
@@ -180,6 +180,25 @@ describe('Container printing', () => {
             const actual: Point = container.setCurrentBlock(singleBlock).getCursorPositions()[0]
 
             assert.deepEqual(actual, expected)
+        }) 
+    })
+
+    describe('settled block collision', () => {
+        let container: Container = null
+        
+        beforeEach(() => container = new Container(5, 5)
+            .setCurrentBlock(teeBlock)
+            .moveCursorDown()
+            .moveCursorDown()
+            .moveCursorDown()
+            .moveCursorDown()
+            .setCurrentBlock(ellBlock)
+            .moveCursorDown()
+            .moveCursorDown()
+        )
+
+        it('should collide', () => {
+            assert.deepEqual(container.toString(), container.moveCursorDown().toString())
         }) 
     })
 })
