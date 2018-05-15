@@ -1,7 +1,17 @@
 import { Block } from "./block"
 import { Point } from "./point"
 
-export class Container {
+export interface BlockContainer {
+    setCurrentBlock(block: Block): Container;
+    moveCursorLeft(): Container
+    moveCursorRight(): Container
+    moveCursorDown(): Container
+    setCursor(cursor: Point): Container
+    getCursorPositions(cursor: Point): Point[]
+    toString(): String
+}
+
+export class Container implements BlockContainer {
     private width: number
     private height: number
     private cursor: Point = null
@@ -32,14 +42,15 @@ export class Container {
 
     moveCursorDown() : Container {
         if (!this.moveCursor(this.cursor.down())) {
+            this.getCursorPositions().forEach(({ x, y }) => this.grid[x][y] = true)
             this.currentBlock = null
             this.resetCursor()
         }
         return this
     }
-    
+
     private moveCursor(newCursor: Point) : boolean {
-        if (this.blockCollision(newCursor)) return false
+        if (!this.currentBlock || this.blockCollision(newCursor)) return false
  
         this.cursor = newCursor
         return true
@@ -50,9 +61,9 @@ export class Container {
         return this
     }
 
-    getCursorPositions(newCursor: Point = this.cursor) : Point[] {
+    getCursorPositions(cursor: Point = this.cursor) : Point[] {
         if (!this.currentBlock) return []
-        return this.currentBlock.getPositions(newCursor)
+        return this.currentBlock.getPositions(cursor)
     }
 
     private resetCursor() : Container {
@@ -64,7 +75,7 @@ export class Container {
     }
 
     private blockCollision(newCursor: Point) : boolean {
-        return this.getCursorPositions(newCursor).some(position => this.outOfBounds(position))
+        return this.getCursorPositions(newCursor).some(position => this.outOfBounds(position) || this.grid[position.x][position.y])
     }
 
     // Should this be a method in point -- and pass in width / height?
