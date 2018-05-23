@@ -22,12 +22,26 @@ export const reverseEllBlock = new Block([
     new Point(2, -1)
 ])
 
-export const squareBlock = new Block([
-    new Point(0, 0),
-    new Point(0, 1),
-    new Point(1, 0),
-    new Point(1, 1)
-])
+class SquareBlock extends Block {
+    public constructor() {
+        super([
+            new Point(0, 0),
+            new Point(0, 1),
+            new Point(1, 0),
+            new Point(1, 1)
+        ])
+    }
+
+    rotateClockwise() {
+        return this
+    }
+
+    rotateCounterClockwise() {
+        return this
+    }
+}
+
+export const squareBlock = new SquareBlock()
 
 export const essBlock = new Block([
     new Point(0, 0),

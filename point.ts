@@ -18,4 +18,8 @@ export class Point {
     down() : Point {
         return new Point(this.x + 1, this.y)
     }
+
+    up() : Point {
+        return new Point(this.x - 1, this.y)
+    }
 }

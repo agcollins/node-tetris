@@ -10,6 +10,7 @@ export interface BlockContainer {
     getCursorPositions(cursor: Point): Point[]
     rotateCursorClockwise(directionStategy: (newBlock: Block, directionFunction: (point: Point) => Point) => Point): Container
     rotateCursorCounterClockwise(directionStategy: (newBlock: Block, directionFunction: (point: Point) => Point) => Point): Container
+    getScore(): number
     toString(): String
 }
 
@@ -19,8 +20,10 @@ export class Container implements BlockContainer {
     private cursor: Point = null
     private currentBlock: Block = null
     private grid: boolean[][] = null
+    private score: number
 
     constructor(width: number, height: number) {
+        this.score = 0
         this.width = width
         this.height = height
         this.grid = new Array(height).fill(false).map(row => Array(width).fill(false))
@@ -47,8 +50,26 @@ export class Container implements BlockContainer {
             this.getCursorPositions().forEach(({ x, y }) => this.grid[x][y] = true)
             this.currentBlock = null
             this.resetCursor()
+            this.score += this.scanRows()
         }
         return this
+    }
+
+    // Naive row scanning and clearing algorithm
+    private scanRows = (): number => {
+        let count = 0
+        this.grid.forEach((row: boolean[], rowIndex: number) => {
+            if (row.every((value: boolean, columnIndex: number) => value)) {
+                ++count
+                for (let i = rowIndex; i > 0; --i) {
+                    for (let j = 0; j < this.width; ++j) {
+                        this.grid[i][j] = this.grid[i - 1][j] // maybe?
+                    }
+                }
+            }
+        })
+
+        return count
     }
 
     private moveCursor = (newCursor: Point): boolean => {
@@ -78,16 +99,21 @@ export class Container implements BlockContainer {
 
     private blockCollision = (newCursor: Point, newBlock: Block): boolean => {
         return this.getCursorPositions(newCursor, newBlock).some(position => {
-            if (this.outOfBounds(position)) return true
-            return this.grid[position.x][position.y] // These two conditions may not be combined because of array evaluation
+            if (this.outOfBoundsNonTop(position)) return true
+            if (this.outOfBoundsTop(position)) return false
+            return this.grid[position.x][position.y] // This condition may not be combined because of array evaluation
         })
     }
 
     // Should this be a method in point -- and pass in width / height?
-    private outOfBounds = (point: Point): boolean => {
+    private outOfBoundsTop = (point: Point): boolean => {
+        if (point.x < 0) return true
+        return false
+    }
+    
+    private outOfBoundsNonTop = (point: Point): boolean => {
         if (point.y < 0) return true
         if (point.x >= this.height) return true
-        if (point.x < 0) return true
         if (point.y >= this.width) return true
         return false
     }
@@ -112,7 +138,21 @@ export class Container implements BlockContainer {
     rotateCursorClockwise = () => {
         if (this.currentBlock) {
             const newBlock: Block = this.currentBlock.rotateClockwise()
-            const newCursor: Point = this.moveTwoBack(newBlock, (cursor: Point) => cursor.right())
+            let newCursor: Point = this.moveTwoBack(newBlock, (cursor: Point) => cursor.right())
+
+            if (newCursor !== null) {
+                this.cursor = newCursor
+                this.currentBlock = newBlock
+            }
+
+            newCursor = this.moveTwoBack(newBlock, (cursor: Point) => cursor.up())
+
+            if (newCursor !== null) {
+                this.cursor = newCursor
+                this.currentBlock = newBlock
+            }
+
+            newCursor = this.moveTwoBack(newBlock, (cursor: Point) => cursor.left())
 
             if (newCursor !== null) {
                 this.cursor = newCursor
@@ -126,7 +166,21 @@ export class Container implements BlockContainer {
     rotateCursorCounterClockwise = () => {
         if (this.currentBlock) {
             const newBlock: Block = this.currentBlock.rotateCounterClockwise()
-            const newCursor: Point = this.moveTwoBack(newBlock, (cursor: Point) => cursor.left())
+            let newCursor: Point = this.moveTwoBack(newBlock, (cursor: Point) => cursor.left())
+
+            if (newCursor !== null) {
+                this.cursor = newCursor
+                this.currentBlock = newBlock
+            }
+
+            newCursor = this.moveTwoBack(newBlock, (cursor: Point) => cursor.up())
+
+            if (newCursor !== null) {
+                this.cursor = newCursor
+                this.currentBlock = newBlock
+            }
+
+            newCursor = this.moveTwoBack(newBlock, (cursor: Point) => cursor.right())
 
             if (newCursor !== null) {
                 this.cursor = newCursor
@@ -140,8 +194,7 @@ export class Container implements BlockContainer {
     toString(): String {
         const positions = this.getCursorPositions()
         positions.forEach(position => {
-            // console.log(position)
-            if (this.outOfBounds(position)) return
+            if (this.outOfBoundsNonTop(position) || this.outOfBoundsTop(position)) return
             this.grid[position.x][position.y] = true
         })
 
@@ -154,10 +207,14 @@ export class Container implements BlockContainer {
         }
 
         positions.forEach(position => {
-            if (this.outOfBounds(position)) return
+            if (this.outOfBoundsNonTop(position) || this.outOfBoundsTop(position)) return
             this.grid[position.x][position.y] = false
         })
 
         return buffer.join('')
+    }
+
+    getScore = (): number =>  {
+        return this.score
     }
 }
