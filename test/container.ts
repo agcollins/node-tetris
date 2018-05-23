@@ -185,7 +185,6 @@ describe('Container printing', () => {
 
     describe('settled block scenarios', () => {
         let container: Container = null
-        let teeContainer: Container = null
         
         beforeEach(() => container = new Container(5, 5)
             .setCurrentBlock(teeBlock)
@@ -198,21 +197,24 @@ describe('Container printing', () => {
             .moveCursorDown()
         )
 
-        beforeEach(() => teeContainer = new Container(5, 5)
-            .setCurrentBlock(teeBlock)
-            .rotateCursorClockwise()
-        )
-
         it('should collide', () => {
             assert.deepEqual(container.toString(), container.moveCursorDown().toString())
         }) 
-
-        it('should allow settlement with rotation', () => {
-            console.log(teeContainer.toString())
-        })
     })
 
-    // describe('rotation of blocks', () => {
-    //     before
-    // })
+    describe('rotation', () => {
+        let container: Container = null
+
+        beforeEach(() => container = new Container(5, 5).setCurrentBlock(teeBlock))
+
+        it('should not rotate at the top of the container', () => {
+            assert.deepEqual(container.rotateCursorClockwise().toString(),
+                '.x...\n' +
+                'xxx..\n' + 
+                '.....\n' +
+                '.....\n' + 
+                '.....'
+            )
+        })
+    })
 })
