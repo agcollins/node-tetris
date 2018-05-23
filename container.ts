@@ -77,15 +77,10 @@ export class Container implements BlockContainer {
     }
 
     private blockCollision = (newCursor: Point, newBlock: Block): boolean => {
-        console.log('blockCollision start')
-        const result = this.getCursorPositions(newCursor).some(position => { 
-            console.log(JSON.stringify(position))
+        return this.getCursorPositions(newCursor, newBlock).some(position => {
             if (this.outOfBounds(position)) return true
-            return this.grid[position.x][position.y]
+            return this.grid[position.x][position.y] // These two conditions may not be combined because of array evaluation
         })
-
-        console.log(`blockCollision end, retval: ${result}`)
-        return result
     }
 
     // Should this be a method in point -- and pass in width / height?
@@ -98,42 +93,45 @@ export class Container implements BlockContainer {
     }
 
     // returns null if no point can be found, otherwise returns the first available spot
-    private moveTwoBack = (newBlock: Block, directionFunction: (cursor: Point) => Point): Point => {
-        console.log('move two back')
-        console.log('cursor is ', this.cursor)
+    private moveTwoBack = (newBlock: Block, directionFunction: (cursor: Point) => Point): Point | null => {
+        // Check the current position.
+        if (!this.blockCollision(this.cursor, newBlock)) return this.cursor
+
+        // Check one position back.
         const firstTry: Point = directionFunction(this.cursor)
-        console.log(`first try: ${firstTry}`)
         if (!this.blockCollision(firstTry, newBlock)) return firstTry
 
+        // Check two positions back.
         const secondTry: Point = directionFunction(firstTry)
-        console.log(`second try: ${secondTry}`)
-        if(!this.blockCollision(secondTry, newBlock)) return secondTry
+        if (!this.blockCollision(secondTry, newBlock)) return secondTry
 
+        // No open position was found
         return null
     }
 
-    rotateCursorClockwise = (directionStategy: any = this.moveTwoBack): Container => {
-        console.log('rotate cursor clockwise')
-        // console.log(this.toString())
-        const newBlock: Block = this.currentBlock.rotateClockwise()
-        console.log(newBlock)
-        const newCursor: Point = directionStategy(newBlock, (cursor: Point) => cursor.right())
-        console.log(newCursor)
+    rotateCursorClockwise = () => {
+        if (this.currentBlock) {
+            const newBlock: Block = this.currentBlock.rotateClockwise()
+            const newCursor: Point = this.moveTwoBack(newBlock, (cursor: Point) => cursor.right())
 
-        if (newCursor !== null) {
-            this.cursor = newCursor
-            this.currentBlock = newBlock
+            if (newCursor !== null) {
+                this.cursor = newCursor
+                this.currentBlock = newBlock
+            }
         }
 
         return this
     }
 
-    rotateCursorCounterClockwise(directionStategy: any = this.moveTwoBack): Container {
-        const newBlock: Block = this.currentBlock.rotateCounterClockwise()
-        const newCursor: Point = directionStategy(newBlock, (cursor: Point) => cursor.left())
-        if (newCursor !== null) {
-            this.cursor = newCursor
-            this.currentBlock = newBlock
+    rotateCursorCounterClockwise = () => {
+        if (this.currentBlock) {
+            const newBlock: Block = this.currentBlock.rotateCounterClockwise()
+            const newCursor: Point = this.moveTwoBack(newBlock, (cursor: Point) => cursor.left())
+
+            if (newCursor !== null) {
+                this.cursor = newCursor
+                this.currentBlock = newBlock
+            }
         }
 
         return this
@@ -142,7 +140,7 @@ export class Container implements BlockContainer {
     toString(): String {
         const positions = this.getCursorPositions()
         positions.forEach(position => {
-            console.log(position)
+            // console.log(position)
             if (this.outOfBounds(position)) return
             this.grid[position.x][position.y] = true
         })

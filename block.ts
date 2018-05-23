@@ -12,12 +12,10 @@ export class Block {
     }
 
     rotateClockwise() : Block {
-        this.offsets = this.offsets.map(offset => new Point(offset.y, - offset.x))
-        return this
+        return new Block(this.offsets.map(offset => new Point(offset.y, - offset.x)))
     }
 
     rotateCounterClockwise() : Block {
-        this.offsets = this.offsets.map(offset => new Point(-offset.y, offset.x))
-        return this
+        return new Block(this.offsets.map(offset => new Point(-offset.y, offset.x)))
     }
 }

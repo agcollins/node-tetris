@@ -28,6 +28,11 @@ process.stdin.on('readable', () => {
                 intervalReset = true
                 container.rotateCursorClockwise()
                 break;
+            case ' ':
+                while(container.getCursorPositions().length != 0)
+                    container.moveCursorDown()
+                container.setCurrentBlock(teeBlock)
+                break;
             case 'q':
                 process.exit(0)
                 return;
