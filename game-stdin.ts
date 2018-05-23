@@ -1,8 +1,7 @@
 import { Container } from './container'
-import { teeBlock } from './preset-block'
-import { cursorTo } from 'readline';
+import { generateRandomBlock } from './preset-block'
 
-const container = new Container(10, 20).setCurrentBlock(teeBlock)
+const container = new Container(10, 20).setCurrentBlock(generateRandomBlock())
 let intervalReset = false
 
 process.stdin.setRawMode(true)
@@ -21,7 +20,7 @@ process.stdin.on('readable', () => {
             case 'j':
                 container.moveCursorDown()
                 if (container.getCursorPositions().length === 0) {
-                    container.setCurrentBlock(teeBlock)
+                    container.setCurrentBlock(generateRandomBlock())
                 }
                 break;
             case 'k':
@@ -29,9 +28,9 @@ process.stdin.on('readable', () => {
                 container.rotateCursorClockwise()
                 break;
             case ' ':
-                while(container.getCursorPositions().length != 0)
+                while(container.getCursorPositions().length !== 0)
                     container.moveCursorDown()
-                container.setCurrentBlock(teeBlock)
+                container.setCurrentBlock(generateRandomBlock())
                 break;
             case 'q':
                 process.exit(0)
@@ -45,9 +44,9 @@ setInterval(() => {
     if (intervalReset /* && container.isBlockNearSettle() */) return intervalReset = false
     console.log(container.moveCursorDown().toString())
     if (container.getCursorPositions().length === 0) {
-        container.setCurrentBlock(teeBlock)
+        container.setCurrentBlock(generateRandomBlock())
     }
-}, 2000)
+}, 500)
 
 process.stdin.on('end', () => {
     process.stdout.write('end')
