@@ -92,18 +92,18 @@ export class Container implements BlockContainer {
         return false
     }
 
-    // returns null if no point can be found, otherwise returns the first available spot
-    private moveTwoBack = (newBlock: Block, directionFunction: (cursor: Point) => Point): Point | null => {
+    // returns null if no point can be found, otherwise returns the first available point relative to the cursor
+    private moveTwoBack = (rotatedBlock: Block, directionFunction: (cursor: Point) => Point): Point | null => {
         // Check the current position.
-        if (!this.blockCollision(this.cursor, newBlock)) return this.cursor
+        if (!this.blockCollision(this.cursor, rotatedBlock)) return this.cursor
 
         // Check one position back.
         const firstTry: Point = directionFunction(this.cursor)
-        if (!this.blockCollision(firstTry, newBlock)) return firstTry
+        if (!this.blockCollision(firstTry, rotatedBlock)) return firstTry
 
         // Check two positions back.
         const secondTry: Point = directionFunction(firstTry)
-        if (!this.blockCollision(secondTry, newBlock)) return secondTry
+        if (!this.blockCollision(secondTry, rotatedBlock)) return secondTry
 
         // No open position was found
         return null
