@@ -143,18 +143,10 @@ export class Container implements BlockContainer {
             if (newCursor !== null) {
                 this.cursor = newCursor
                 this.currentBlock = newBlock
-            }
-
-            newCursor = this.moveTwoBack(newBlock, (cursor: Point) => cursor.up())
-
-            if (newCursor !== null) {
+            } else if (newCursor = this.moveTwoBack(newBlock, (cursor: Point) => cursor.up())) {
                 this.cursor = newCursor
                 this.currentBlock = newBlock
-            }
-
-            newCursor = this.moveTwoBack(newBlock, (cursor: Point) => cursor.left())
-
-            if (newCursor !== null) {
+            } else if (newCursor = this.moveTwoBack(newBlock, (cursor: Point) => cursor.left())) {
                 this.cursor = newCursor
                 this.currentBlock = newBlock
             }
@@ -171,18 +163,10 @@ export class Container implements BlockContainer {
             if (newCursor !== null) {
                 this.cursor = newCursor
                 this.currentBlock = newBlock
-            }
-
-            newCursor = this.moveTwoBack(newBlock, (cursor: Point) => cursor.up())
-
-            if (newCursor !== null) {
+            } else if (newCursor = this.moveTwoBack(newBlock, (cursor: Point) => cursor.up())) {
                 this.cursor = newCursor
                 this.currentBlock = newBlock
-            }
-
-            newCursor = this.moveTwoBack(newBlock, (cursor: Point) => cursor.right())
-
-            if (newCursor !== null) {
+            } else if (newCursor = this.moveTwoBack(newBlock, (cursor: Point) => cursor.right())) {
                 this.cursor = newCursor
                 this.currentBlock = newBlock
             }
