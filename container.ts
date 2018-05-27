@@ -1,8 +1,11 @@
 import { Block } from "./block";
 import { Point } from "./point";
+import { generateRandomBlock } from "./preset-block";
 
 export interface BlockContainer {
   setCurrentBlock(block: Block): Container;
+  getUpcomingBlocks(): Block[];
+  getCurrentBlock(): Block;
   moveLeft(): Container;
   moveRight(): Container;
   moveDown(): Container;
@@ -16,6 +19,8 @@ export class Container implements BlockContainer {
   private currentBlock: Block;
   private grid: boolean[][];
   private blockQueue: Block[];
+  private blockIndex = 0;
+  private blockBufferSize: number = 7;
 
   constructor(width: number, height: number) {
     this.width = width;
@@ -23,9 +28,22 @@ export class Container implements BlockContainer {
     this.grid = new Array(height)
       .fill(false)
       .map(row => Array(width).fill(false));
-    this.blockQueue = new Array(100);
-    
-    for(let i = 0; i < 7; this.blockQueue[i++] = generateRandomBlock())
+
+    this.blockQueue = new Array(7);
+    for (let i = 0; i < this.blockBufferSize; ++i) {
+      this.blockQueue[i] = generateRandomBlock();
+    }
+  }
+
+  getCurrentBlock(): Block {
+    return this.currentBlock;
+  }
+
+  getUpcomingBlocks(): Block[] {
+    return this.blockQueue.slice(
+      this.blockIndex,
+      this.blockIndex + this.blockBufferSize
+    );
   }
 
   setCurrentBlock(block: Block): Container {
@@ -39,7 +57,6 @@ export class Container implements BlockContainer {
   }
 
   moveLeft(): Container {
-    //this.moveCursor(this.cursor.left());
     this.move(this.currentBlock.left());
     return this;
   }
@@ -52,9 +69,18 @@ export class Container implements BlockContainer {
   moveDown(): Container {
     const testBlock = this.currentBlock.down();
     if (!this.move(testBlock)) {
-      testBlock.getPositions().forEach(({ x, y }) => (this.grid[x][y] = true));
+      testBlock.getPositions().forEach(({ x, y }) => this.setteBlock(x, y));
+      this.setCurrentBlock(this.getNextBlock());
     }
     return this;
+  }
+
+  private getNextBlock(): Block {
+    this.blockQueue[
+      this.blockIndex + this.blockBufferSize
+    ] = generateRandomBlock();
+
+    return this.blockQueue[this.blockIndex];
   }
 
   private move(testBlock: Block): boolean {
